@@ -1,65 +1,11 @@
-call plug#begin()
+" Map leader key is set to ';'
+let g:mapleader = ";"
 
-" Pretty colours
-Plug 'catppuccin/nvim', {'as': 'catppuccin'}
-Plug 'tomasr/molokai'
-Plug 'morhetz/gruvbox'
-Plug 'ayu-theme/ayu-vim'
-Plug 'ghifarit53/tokyonight-vim'
-Plug 'flazz/vim-colorschemes'
-
-" Discord RPC
-Plug 'andweeb/presence.nvim'
-
-" Autosave 
-Plug 'Pocco81/AutoSave.nvim'
-
-" Nice status bar at the bottom of the screen
- Plug 'itchyny/lightline.vim'
-    
-" Allows for easy surrounding of text
-Plug 'tpope/vim-surround'
-
-" Better Syntax Support
-Plug 'sheerun/vim-polyglot'
-
-" File Explorer
-Plug 'scrooloose/NERDTree'
-
-" Auto pairs for '(' '[' '{'
-Plug 'jiangmiao/auto-pairs'
-
-" Collection of common configurations for the Nvim LSP client
-Plug 'neovim/nvim-lspconfig'
-
-" LSP completion source for nvim-cmp
-Plug 'hrsh7th/cmp-nvim-lsp'
-Plug 'tami5/lspsaga.nvim'
-Plug 'ray-x/lsp_signature.nvim'
-
-" Snippet completion source for nvim-cmp
-Plug 'hrsh7th/cmp-vsnip'
-" Snippet engine
-Plug 'hrsh7th/vim-vsnip'
-" Completion framework
-Plug 'hrsh7th/nvim-cmp'
-
-" Other useful completion sources
-Plug 'hrsh7th/cmp-path'
-Plug 'hrsh7th/cmp-buffer'
-
-" To enable more of the features of rust-analyzer, such as inlay hints and more!
-Plug 'simrat39/rust-tools.nvim'
-
-" Fuzzy finder
-Plug 'nvim-lua/popup.nvim'
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim'
-
-call plug#end()
+runtime ./plugins.vim
 
 nnoremap <silent> <space><space> :Lspsaga code_action<CR>
 vnoremap <silent> <space><space> :<C-U>Lspsaga range_code_action<CR>
+nnoremap <silent> <leader>r :Lspsaga rename<CR>
 
 lua << EOF
 local autosave = require("autosave")
@@ -67,7 +13,6 @@ local autosave = require("autosave")
 autosave.setup(
     {
         enabled = true,
-        execution_message = "AutoSave: saved at " .. vim.fn.strftime("%H:%M:%S"),
         events = {"InsertLeave", "TextChanged"},
         conditions = {
             exists = true,
@@ -85,17 +30,24 @@ EOF
 
 lua << EOF
 local catppuccin = require("catppuccin")
+local lualine = require("lualine")
 
--- configure it
-catppuccin.setup({
+catppuccin.setup {
     term_colors = true,
     styles = {
         variables = "NONE",
         keywords = "NONE",
         functions = "NONE"
     },
-    lsp_trouble = true
-})
+    lsp_trouble = true,
+    lsp_saga = true
+}
+
+lualine.setup {
+  options = {
+    theme = "catppuccin"
+  }
+}
 EOF
 
 " ==================== RUST ANALYSER / LSP ==============
@@ -127,13 +79,16 @@ local opts = {
         },
         inlay_hints = {
             show_parameter_hints = false,
-            other_hints_prefix = "<< ",
+            other_hints_prefix = "<< "
+            -- Enable following config when https://github.com/simrat39/rust-tools.nvim/issues/197 is resolved
+            -- only_current_line = true,
+            -- only_current_line_autocmd = "CursorMoved,CursorMovedI"
         },
     },
 
-    -- all the opts to send to nvim-lspconfig
-    -- these override the defaults set by rust-tools.nvim
-    -- see https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md#rust_analyzer
+    -- All the opts to send to nvim-lspconfig
+    -- These override the defaults set by rust-tools.nvim
+    -- See https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md#rust_analyzer
     server = {
         -- on_attach is a callback called when the language server attachs to the buffer
         -- on_attach = on_attach,
@@ -141,10 +96,9 @@ local opts = {
             -- to enable rust-analyzer settings visit:
             -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
             ["rust-analyzer"] = {
-                -- enable clippy on save
                 checkOnSave = {
                     command = "clippy",
-                    features = "all"
+                    allFeatures = true
                 }
             }
         },
@@ -163,19 +117,18 @@ require "lsp_signature".on_attach({
 EOF
 
 " Code navigation shortcuts
-" as found in :help lsp
-nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> fc    <cmd>lua vim.lsp.buf.formatting()<CR>
 nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
-nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
-nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
-nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
+nnoremap <silent> gi    <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> <C-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
+nnoremap <silent> gs    <cmd>lua vim.lsp.buf.type_definition()<CR>
 nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
 nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
 nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 nnoremap <silent> gd    <cmd>lua vim.lsp.buf.definition()<CR>
-
-" Quick-fix
 nnoremap <silent> ga    <cmd>lua vim.lsp.buf.code_action()<CR>
+nnoremap <silent> d[ <cmd>lua vim.diagnostic.goto_prev()<CR>
+nnoremap <silent> d] <cmd>lua vim.diagnostic.goto_next()<CR>
 
 " Setup Completion
 " See https://github.com/hrsh7th/nvim-cmp#basic-configuration
@@ -224,11 +177,7 @@ set signcolumn=yes
 " 300ms of no cursor movement to trigger CursorHold
 set updatetime=300
 " Show diagnostic popup on cursor hover
-autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
-
-" Goto previous/next diagnostic warning/error
-nnoremap <silent> g[ <cmd>lua vim.diagnostic.goto_prev()<CR>
-nnoremap <silent> g] <cmd>lua vim.diagnostic.goto_next()<CR>
+autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false, border = 'rounded', })
 
 " =================== GENERAL CONFIG ==================
 
@@ -242,9 +191,6 @@ filetype indent on
 " Set to auto read when a file is changed from the outside
 set autoread
 au FocusGained,BufEnter * checktime
-
-" Map leader key is set to ','
-let mapleader = ","
 
 " ================== VIM USER INTERFACE =================
 
@@ -264,10 +210,11 @@ if (empty($TMUX))
   endif
 endif
 
-set termguicolors     " enable true colors support
-colorscheme catppuccin
+" Enable true colors support
+set termguicolors
 
-let g:lightline = {'colorscheme': 'catppuccin'}
+" Self-explanatory
+colorscheme catppuccin
 
 let g:neovide_cursor_trail_length=0.01
 let g:neovide_cursor_animation_length=0.06
@@ -293,10 +240,10 @@ endif
 set ruler
 
 " Height of the command bar
-set cmdheight=1
+set cmdheight=2
 
 " A buffer becomes hidden when it is abandoned
-set hid
+set hidden
 
 " Configure backspace so it acts as it should act
 set backspace=eol,start,indent
@@ -416,12 +363,11 @@ nnoremap <a-i> :RustToggleInlayHints<cr>
 " Close the current buffer
 nnoremap <leader>bd :Bclose<cr>:tabclose<cr>gT
 
-" Close all the buffers
-nnoremap <leader>ba :bufdo bd<cr>
+" Close all the buffers except the current one
+nnoremap <leader>c :BufOnly<CR>
 
 nnoremap <leader>l :bnext<cr>
 nnoremap <leader>h :bprevious<cr>
-
 
 " Useful mappings for managing tabs
 nnoremap <leader>tn :tabnew<cr>
@@ -458,13 +404,10 @@ set noshowmode
 " Remove file name at the top
 set showtabline=0
 
-" Format the status line
-set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
-
 " ================= EDITING MAPPINGS ===================
 
-" Format rust code
-nnoremap fc :RustFmt<cr>
+" Quick save
+nnoremap <leader>w :w<cr>
 
 " Remap VIM 0 to first non-blank character
 nnoremap 0 ^
@@ -546,3 +489,14 @@ function! VisualSelection(direction, extra_filter) range
     let @/ = l:pattern
     let @" = l:saved_reg
 endfunction
+
+command BufOnly silent! execute "%bd|e#|bd#"
+
+" Auto-reload config
+if (!exists('*SourceConfig'))
+  function SourceConfig() abort
+    source $MYVIMRC
+  endfunction
+endif
+
+nnoremap <silent> <Leader><Leader> :call SourceConfig()<cr>
