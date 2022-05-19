@@ -14,4 +14,4 @@ Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-buffer'
 
 " Enable rust inlay hints & more
-Plug 'simrat39/rust-tools.nvim', { 'commit': 'fbfcd9c4b7e40202ccf3db5035ac3c2b15a4413f' }
+Plug 'simrat39/rust-tools.nvim'
