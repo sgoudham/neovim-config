@@ -3,29 +3,34 @@ let g:mapleader = ";"
 
 runtime ./plugins.vim
 
+lua require('impatient')
+lua require('lspsaga').init_lsp_saga()
+
 nnoremap <silent> <space><space> :Lspsaga code_action<CR>
 vnoremap <silent> <space><space> :<C-U>Lspsaga range_code_action<CR>
 nnoremap <silent> <leader>r :Lspsaga rename<CR>
 
+" treesitter"
+lua << EOF
+local treesitter = require("nvim-treesitter.configs")
+
+treesitter.setup {
+    ensure_installed = { "c", "java", "rust" },
+    sync_install = false,
+    highlight = {
+        enable = true,
+        additional_vim_regex_highlighting = false
+    }
+}
+EOF
+
+" autosave"
 lua << EOF
 local autosave = require("autosave")
 
-autosave.setup(
-    {
-        enabled = true,
-        events = {"InsertLeave", "TextChanged"},
-        conditions = {
-            exists = true,
-            filename_is_not = {},
-            filetype_is_not = {},
-            modifiable = true
-        },
-        write_all_buffers = false,
-        on_off_commands = true,
-        clean_command_line_interval = 0,
-        debounce_delay = 135
-    }
-)
+autosave.setup {
+    enabled = true,
+}
 EOF
 
 lua << EOF
@@ -42,6 +47,44 @@ catppuccin.setup {
     lsp_trouble = true,
     lsp_saga = true
 }
+
+-- Current workaround for treesitter -> https://github.com/catppuccin/nvim/issues/95
+local cp = require("catppuccin.api.colors").get_colors()
+catppuccin.remap({
+  	ErrorMsg = { fg = cp.red, style = "bold" },
+    TSProperty = { fg = cp.yellow, style = "NONE" },
+	TSInclude = { fg = cp.teal, style = "NONE" },
+	TSOperator = { fg = cp.sky, style = "bold" },
+	TSKeywordOperator = { fg = cp.sky, style = "bold" },
+	TSPunctSpecial = { fg = cp.maroon, style = "bold" },
+	TSFloat = { fg = cp.peach, style = "bold" },
+	TSNumber = { fg = cp.peach, style = "bold" },
+	TSBoolean = { fg = cp.peach, style = "bold" },
+	TSConditional = { fg = cp.mauve, style = "bold" },
+	TSRepeat = { fg = cp.mauve, style = "bold" },
+	TSException = { fg = cp.peach, style = "NONE" },
+	TSConstBuiltin = { fg = cp.lavender, style = "NONE" },
+	TSFuncBuiltin = { fg = cp.peach, style = "NONE" },
+	TSTypeBuiltin = { fg = cp.yellow, style = "NONE" },
+	TSVariableBuiltin = { fg = cp.teal, style = "NONE" },
+	TSFunction = { fg = cp.blue, style = "NONE" },
+	TSParameter = { fg = cp.rosewater, style = "NONE" },
+	TSKeywordFunction = { fg = cp.maroon, style = "NONE" },
+	TSKeyword = { fg = cp.red, style = "NONE" },
+	TSMethod = { fg = cp.blue, style = "NONE" },
+	TSNamespace = { fg = cp.rosewater, style = "NONE" },
+	TSStringRegex = { fg = cp.peach, style = "NONE" },
+	TSVariable = { fg = cp.white, style = "NONE" },
+	TSTagAttribute = { fg = cp.mauve, style = "NONE" },
+	TSURI = { fg = cp.rosewater, style = "underline" },
+	TSLiteral = { fg = cp.teal, style = "NONE" },
+	TSEmphasis = { fg = cp.maroon, style = "NONE" },
+	TSStringEscape = { fg = cp.pink, style = "NONE" },
+	bashTSFuncBuiltin = { fg = cp.red, style = "NONE" },
+	bashTSParameter = { fg = cp.yellow, style = "NONE" },
+	typescriptTSProperty = { fg = cp.lavender, style = "NONE" },
+	cssTSProperty = { fg = cp.yellow, style = "NONE" },
+})
 
 lualine.setup {
   options = {
@@ -65,10 +108,11 @@ set shortmess+=c
 " Configure LSP through rust-tools.nvim plugin.
 " rust-tools will configure and enable certain LSP features for us.
 " See https://github.com/simrat39/rust-tools.nvim#configuration
-lua <<EOF
+lua << EOF
 
 -- nvim_lsp object
-local nvim_lsp = require'lspconfig'
+local nvim_lsp = require('lspconfig')
+local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 local opts = {
     tools = {
@@ -86,19 +130,20 @@ local opts = {
         },
     },
 
-    -- All the opts to send to nvim-lspconfig
-    -- These override the defaults set by rust-tools.nvim
     -- See https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md#rust_analyzer
     server = {
-        -- on_attach is a callback called when the language server attachs to the buffer
-        -- on_attach = on_attach,
+        capabilities = capabilities,
         settings = {
-            -- to enable rust-analyzer settings visit:
             -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
             ["rust-analyzer"] = {
                 checkOnSave = {
                     command = "clippy",
                     allFeatures = true
+                },
+                completion = {
+                    callable = {
+                        snippets = "add_parentheses"
+                    }
                 }
             }
         },
@@ -110,9 +155,11 @@ require('rust-tools').setup(opts)
 require "lsp_signature".on_attach({
     doc_lines = 0,
     handler_opts = {
-      border = "none"
+      border = "rounded"
     },
-    floating_window = false
+    hint_enable = false,
+    max_width = 100,
+    floating_window_above_cur_line = true
   })
 EOF
 
@@ -132,8 +179,9 @@ nnoremap <silent> d] <cmd>lua vim.diagnostic.goto_next()<CR>
 
 " Setup Completion
 " See https://github.com/hrsh7th/nvim-cmp#basic-configuration
-lua <<EOF
-local cmp = require'cmp'
+lua << EOF
+local cmp = require('cmp')
+
 cmp.setup({
   snippet = {
     expand = function(args)
@@ -142,20 +190,31 @@ cmp.setup({
   },
 
   mapping = {
-    ['<C-p>'] = cmp.mapping.select_prev_item(),
-    ['<C-n>'] = cmp.mapping.select_next_item(),
-    ['<S-Tab>'] = cmp.mapping.select_prev_item(),
-    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<A-k>'] = cmp.mapping.select_prev_item(),
+    ['<A-j>'] = cmp.mapping.select_next_item(),
+    ['<A-p>'] = cmp.mapping.scroll_docs(-4),
+    ['<A-n>'] = cmp.mapping.scroll_docs(4),
     ['<C-e>'] = cmp.mapping.close(),
-    ['<Tab>'] = cmp.mapping.confirm({
-      behavior = cmp.ConfirmBehavior.Insert,
-      select = true,
-    })
+    ['<CR>'] = cmp.mapping.confirm({
+        behavior = cmp.ConfirmBehavior.Insert,
+        select = true,
+    }),
+    ["<Tab>"] = cmp.mapping(function(fallback)
+        -- This little snippet will confirm with tab, and if no entry is selected, will confirm the first item
+        if cmp.visible() then
+            local entry = cmp.get_selected_entry()
+    	if not entry then
+    	  cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+    	else
+    	  cmp.confirm()
+    	end
+          else
+            fallback()
+          end
+        end, {"i","s","c",}
+    ),
   },
 
-  -- Installed sources
   sources = {
     { name = 'nvim_lsp' },
     { name = 'vsnip' },
