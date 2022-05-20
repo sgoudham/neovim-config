@@ -29,7 +29,6 @@ EOF
 " Initialise catppuccin
 lua << EOF
 local catppuccin = require("catppuccin")
-local lualine = require("lualine")
 
 catppuccin.setup {
     term_colors = true,
@@ -86,6 +85,8 @@ EOF
 
 " Initialise lualine
 lua << EOF
+local lualine = require("lualine")
+
 lualine.setup {
   options = {
     theme = "catppuccin"
@@ -221,7 +222,3 @@ cmp.setup {
   }
 }
 EOF
-
-
-
-
