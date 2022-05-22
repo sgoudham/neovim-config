@@ -39,9 +39,6 @@ nnoremap 0 ^
 nnoremap H ^
 nnoremap L $
 
-" Move backwards & forwards
-nnoremap <C-o> 
-
 " Create new line 
 nnoremap <silent> oo o<Esc>
 nnoremap <silent> OO O<Esc>
