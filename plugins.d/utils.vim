@@ -6,3 +6,6 @@ Plug 'jremmen/vim-ripgrep'
 
 " Better syntax highlighting using tree-sitter
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
+" Much better terminal experience within nvim
+Plug 'akinsho/toggleterm.nvim'

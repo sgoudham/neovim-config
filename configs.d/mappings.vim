@@ -23,6 +23,9 @@ nnoremap <silent> <leader>r :Lspsaga rename<CR>
 " NERDTree
 nnoremap <C-n> :NERDTreeToggle<CR>
 
+" toggleterm - Exit terminal
+tnoremap <Esc> <C-\><C-n>
+
 " Exit in and out of insert mode easily
 inoremap jj <Esc>
 inoremap JJ <Esc>
@@ -35,6 +38,17 @@ nnoremap 0 ^
 " Jump to start and end of line using the home row keys
 nnoremap H ^
 nnoremap L $
+
+" Move backwards & forwards
+nnoremap <C-o> 
+
+" Create new line 
+nnoremap <silent> oo o<Esc>
+nnoremap <silent> OO O<Esc>
+
+" Jump backwards ([) and forwards (])
+nnoremap <silent> <C-[> <C-o>
+nnoremap <silent> <C-]> <C-i>
 
 " Disable AutoPairsShortcutJump being bound to ALT+n
 let g:AutoPairsShortcutJump = ''
@@ -52,11 +66,19 @@ nnoremap <C-space> ?
 " Disable highlights
 nnoremap <silent> <leader><space> :noh<cr>
 
-" Shortcutting split navigation
-nnoremap <a-h> <C-w>h
-nnoremap <a-j> <C-w>j
-nnoremap <a-k> <C-w>k
-nnoremap <a-l> <C-w>l
+" Shortcutting split navigation from _any_ mode
+:tnoremap <A-h> <C-\><C-N><C-w>h
+:tnoremap <A-j> <C-\><C-N><C-w>j
+:tnoremap <A-k> <C-\><C-N><C-w>k
+:tnoremap <A-l> <C-\><C-N><C-w>l
+:inoremap <A-h> <C-\><C-N><C-w>h
+:inoremap <A-j> <C-\><C-N><C-w>j
+:inoremap <A-k> <C-\><C-N><C-w>k
+:inoremap <A-l> <C-\><C-N><C-w>l
+:nnoremap <A-h> <C-w>h
+:nnoremap <A-j> <C-w>j
+:nnoremap <A-k> <C-w>k
+:nnoremap <A-l> <C-w>l
 
 " Close all the buffers except the current one
 nnoremap <leader>c :BufOnly<CR>
@@ -69,7 +91,7 @@ catch
 endtry
 
 " Reload NeoVim config
-nnoremap <silent> <Leader><Leader> :call SourceConfig()<cr>
+nnoremap <silent> <leader><leader> :call SourceConfig()<cr>
 
 " Return to last edit position when opening files (You want this!)
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif

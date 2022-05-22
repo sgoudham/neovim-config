@@ -44,7 +44,8 @@ catppuccin.setup {
 }
 
 -- Current workaround for treesitter -> https://github.com/catppuccin/nvim/issues/95
-local cp = require('catppuccin.api.colors').get_colors()
+local cp = require("catppuccin.api.colors").get_colors()
+
 catppuccin.remap({
   	ErrorMsg = { fg = cp.red, style = "bold" },
     TSProperty = { fg = cp.yellow, style = "NONE" },
@@ -91,6 +92,32 @@ lualine.setup {
   options = {
     theme = "catppuccin"
   }
+}
+EOF
+
+" Initialise toggleterm
+lua << EOF
+local toggleterm = require("toggleterm")
+
+toggleterm.setup {
+	size = 20,
+	open_mapping = [[<leader>t]],
+	hide_numbers = true,
+	shade_filetypes = {},
+	shade_terminals = true,
+	shading_factor = 2,
+    insert_mappings = true,
+	start_in_insert = true,
+	direction = "float",
+    shell = "powershell",
+    float_opts = {
+        border = "curved",
+        winblend = 0,
+        highlights = {
+            border = "Normal", 
+            background = "Normal"
+        }
+    }
 }
 EOF
 
