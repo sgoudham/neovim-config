@@ -97,6 +97,10 @@ set smarttab
 set shiftwidth=4
 set tabstop=4
 
+" Open new split panes to right and bottom
+set splitbelow
+set splitright
+
 " Linebreak on 500 characters
 set lbr
 set tw=500

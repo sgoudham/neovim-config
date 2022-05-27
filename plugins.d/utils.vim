@@ -7,5 +7,9 @@ Plug 'jremmen/vim-ripgrep'
 " Better syntax highlighting using tree-sitter
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
-" Much better terminal experience within nvim
-Plug 'akinsho/toggleterm.nvim'
+" Discord RPC
+Plug 'andweeb/presence.nvim'
+
+" Autosave 
+Plug 'Pocco81/AutoSave.nvim'
+

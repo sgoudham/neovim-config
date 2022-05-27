@@ -9,8 +9,8 @@ nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
 nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 nnoremap <silent> gd    <cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> ga    <cmd>lua vim.lsp.buf.code_action()<CR>
-nnoremap <silent> d[ <cmd>lua vim.diagnostic.goto_prev()<CR>
-nnoremap <silent> d] <cmd>lua vim.diagnostic.goto_next()<CR>
+nnoremap <silent> [d <cmd>lua vim.diagnostic.goto_prev()<CR>
+nnoremap <silent> ]d <cmd>lua vim.diagnostic.goto_next()<CR>
 
 " Rust toggle inlay hints
 nnoremap <a-i> :RustToggleInlayHints<cr>
@@ -20,10 +20,12 @@ nnoremap <silent> <space><space> :Lspsaga code_action<CR>
 vnoremap <silent> <space><space> :<C-U>Lspsaga range_code_action<CR>
 nnoremap <silent> <leader>r :Lspsaga rename<CR>
 
-" NERDTree
-nnoremap <C-n> :NERDTreeToggle<CR>
+" NvimTree
+nnoremap <C-n> :NvimTreeToggle<CR>
+nnoremap <leader>r :NvimTreeRefresh<CR>
+nnoremap <leader>n :NvimTreeFindFile<CR>
 
-" toggleterm - Exit terminal
+" Toggleterm - exit terminal
 tnoremap <Esc> <C-\><C-n>
 
 " Exit in and out of insert mode easily
@@ -44,7 +46,7 @@ nnoremap <silent> oo o<Esc>
 nnoremap <silent> OO O<Esc>
 
 " Jump backwards ([) and forwards (])
-nnoremap <silent> <C-[> <C-o>
+nnoremap <silent> <C-[> <c-o>
 nnoremap <silent> <C-]> <C-i>
 
 " Disable AutoPairsShortcutJump being bound to ALT+n
@@ -88,11 +90,10 @@ catch
 endtry
 
 " Reload NeoVim config
-nnoremap <silent> <leader><leader> :call SourceConfig()<cr>
+nnoremap <silent> \\ :call SourceConfig()<cr>
 
 " Return to last edit position when opening files (You want this!)
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-
 
 " Visual mode pressing * or # searches for the current selection
 " Super useful! From an idea by Michael Naumann

@@ -5,27 +5,18 @@ for f in split(glob('~\AppData\Local\nvim\plugins.d\*.vim'), '\n')
     exe 'source' f
 endfor
 
-" Discord RPC
-Plug 'andweeb/presence.nvim'
+" Much better terminal experience within nvim
+Plug 'akinsho/toggleterm.nvim'
 
-" Autosave 
-Plug 'Pocco81/AutoSave.nvim'
-
-" Allows for easy surrounding of text
-Plug 'tpope/vim-surround'
-
-" Better Syntax Support
-Plug 'sheerun/vim-polyglot'
-
-" File Explorer
-Plug 'scrooloose/NERDTree'
-
-" Auto pairs for '(' '[' '{'
-Plug 'jiangmiao/auto-pairs'
+" File explorer
+Plug 'kyazdani42/nvim-tree.lua'
 
 " Fuzzy finder
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
+
+" Git signs for files
+Plug 'lewis6991/gitsigns.nvim'
 
 call plug#end()
