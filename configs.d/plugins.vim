@@ -3,6 +3,20 @@ lua require('impatient')
 " Initialise lspsaga
 lua require('lspsaga').setup()
 
+" Initialise telescope
+lua << EOF
+require("telescope").setup {
+    defaults = {
+        mappings = {
+            i = {
+                ["<ESC>"] = require("telescope.actions").close
+            }
+        }
+    }
+}
+require("telescope").load_extension("fzf")
+EOF
+
 " Initialise treesitter
 lua << EOF
 local treesitter = require("nvim-treesitter.configs")

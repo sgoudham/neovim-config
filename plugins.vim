@@ -15,8 +15,12 @@ Plug 'kyazdani42/nvim-tree.lua'
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
 " Git signs for files
 Plug 'lewis6991/gitsigns.nvim'
+
+" Ensure root directory is selected
+Plug 'airblade/vim-rooter'
 
 call plug#end()

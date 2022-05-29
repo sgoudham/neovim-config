@@ -12,8 +12,11 @@ nnoremap <silent> ga    <cmd>lua vim.lsp.buf.code_action()<CR>
 nnoremap <silent> [d <cmd>lua vim.diagnostic.goto_prev()<CR>
 nnoremap <silent> ]d <cmd>lua vim.diagnostic.goto_next()<CR>
 
-" Rust toggle inlay hints
-nnoremap <a-i> :RustToggleInlayHints<cr>
+" Telescope
+nnoremap ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
 " Lspsaga 
 nnoremap <silent> <space><space> :Lspsaga code_action<CR>
@@ -27,6 +30,9 @@ nnoremap <leader>n :NvimTreeFindFile<CR>
 
 " Toggleterm - exit terminal
 tnoremap <Esc> <C-\><C-n>
+
+" Rust toggle inlay hints
+nnoremap <a-i> :RustToggleInlayHints<cr>
 
 " Exit in and out of insert mode easily
 inoremap jj <Esc>
