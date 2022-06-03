@@ -25,11 +25,21 @@ nnoremap <silent> <leader>r :Lspsaga rename<CR>
 
 " NvimTree
 nnoremap <C-n> :NvimTreeToggle<CR>
-nnoremap <leader>r :NvimTreeRefresh<CR>
-nnoremap <leader>n :NvimTreeFindFile<CR>
 
-" Toggleterm - exit terminal
-tnoremap <Esc> <C-\><C-n>
+" Bufferline
+nnoremap <silent> H :BufferLineCyclePrev<CR>
+nnoremap <silent> L :BufferLineCycleNext<CR>
+
+" Floaterm
+nnoremap <silent> <leader>n :FloatermNew<CR>
+nnoremap <silent> <leader>k :FloatermKill<CR>
+nnoremap <silent> <leader>h :FloatermPrev<CR>
+tnoremap <silent> <leader>h :FloatermPrev<CR>
+nnoremap <silent> <leader>l :FloatermNext<CR>
+tnoremap <silent> <leader>l :FloatermNext<CR>
+nnoremap <silent> <leader>\ :FloatermToggle<CR>
+tnoremap <silent> \ <C-\><C-n>
+
 
 " Rust toggle inlay hints
 nnoremap <a-i> :RustToggleInlayHints<cr>
@@ -43,9 +53,6 @@ nnoremap <leader>w :w<cr>
 
 " 0 -> first non-blank character
 nnoremap 0 ^
-" Jump to start and end of line using the home row keys
-nnoremap H ^
-nnoremap L $
 
 " Create new line 
 nnoremap <silent> oo o<Esc>
@@ -72,18 +79,18 @@ nnoremap <C-space> ?
 nnoremap <silent> <leader><space> :noh<cr>
 
 " Shortcutting split navigation from _any_ mode
-:tnoremap <A-h> <C-\><C-N><C-w>h
-:tnoremap <A-j> <C-\><C-N><C-w>j
-:tnoremap <A-k> <C-\><C-N><C-w>k
-:tnoremap <A-l> <C-\><C-N><C-w>l
-:inoremap <A-h> <C-\><C-N><C-w>h
-:inoremap <A-j> <C-\><C-N><C-w>j
-:inoremap <A-k> <C-\><C-N><C-w>k
-:inoremap <A-l> <C-\><C-N><C-w>l
-:nnoremap <A-h> <C-w>h
-:nnoremap <A-j> <C-w>j
-:nnoremap <A-k> <C-w>k
-:nnoremap <A-l> <C-w>l
+tnoremap <A-h> <C-\><C-N><C-w>h
+tnoremap <A-j> <C-\><C-N><C-w>j
+tnoremap <A-k> <C-\><C-N><C-w>k
+tnoremap <A-l> <C-\><C-N><C-w>l
+inoremap <A-h> <C-\><C-N><C-w>h
+inoremap <A-j> <C-\><C-N><C-w>j
+inoremap <A-k> <C-\><C-N><C-w>k
+inoremap <A-l> <C-\><C-N><C-w>l
+nnoremap <A-h> <C-w>h
+nnoremap <A-j> <C-w>j
+nnoremap <A-k> <C-w>k
+nnoremap <A-l> <C-w>l
 
 " Close all the buffers except the current one
 nnoremap <leader>c :BufOnly<CR>

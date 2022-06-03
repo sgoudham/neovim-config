@@ -6,7 +6,7 @@ for f in split(glob('~\AppData\Local\nvim\plugins.d\*.vim'), '\n')
 endfor
 
 " Much better terminal experience within nvim
-Plug 'akinsho/toggleterm.nvim'
+Plug 'voldikss/vim-floaterm'
 
 " File explorer
 Plug 'kyazdani42/nvim-tree.lua'
@@ -15,12 +15,17 @@ Plug 'kyazdani42/nvim-tree.lua'
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
+Plug 'cljoly/telescope-repo.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
-" Git signs for files
+" Git
+Plug 'tpope/vim-fugitive'
 Plug 'lewis6991/gitsigns.nvim'
 
 " Ensure root directory is selected
 Plug 'airblade/vim-rooter'
+
+" Mimic tabs within IDE's
+Plug 'akinsho/bufferline.nvim', { 'tag': 'v2.*' }
 
 call plug#end()

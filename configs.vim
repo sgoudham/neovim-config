@@ -1,16 +1,17 @@
+" Enable syntax highlighting
+syntax on
+
+" Enable true colours support
+set termguicolors
+
+" Self-explanatory
+let g:catppuccin_flavour = "mocha"
+colorscheme catppuccin
+
 " Configs that are neater in their own file
 for f in split(glob('~\AppData\Local\nvim\configs.d\*.vim'), '\n')
     exe 'source' f
 endfor
-
-" Enable true colors support
-set termguicolors
-
-" Self-explanatory
-colorscheme catppuccin
-
-" Enable syntax highlighting
-syntax on
 
 " http://stackoverflow.com/questions/2158516/delay-before-o-opens-a-new-line
 set timeoutlen=200 
@@ -33,9 +34,6 @@ set ruler
 " Always show the status line
 set laststatus=3
 set noshowmode
-
-" Remove file name at the top
-set showtabline=0
 
 " See how many lines of history VIM has to remember
 set history=500

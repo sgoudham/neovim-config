@@ -3,6 +3,24 @@ lua require('impatient')
 " Initialise lspsaga
 lua require('lspsaga').setup()
 
+" Floaterm
+let g:floaterm_shell="powershell.exe"
+let g:floaterm_width=0.8
+let g:floaterm_height=0.8
+" Set floaterm window foreground to gray once the cursor moves out from it
+hi FloatermNC guifg=gray
+
+" Initialise bufferline
+lua << EOF
+local bufferline = require('bufferline')
+
+bufferline.setup {
+    options = {
+        offsets = {{filetype = "NvimTree", text = "File Explorer", text_align = "center"}}
+    }
+}
+EOF
+
 " Initialise telescope
 lua << EOF
 require("telescope").setup {
@@ -15,6 +33,7 @@ require("telescope").setup {
     }
 }
 require("telescope").load_extension("fzf")
+require("telescope").load_extension("repo")
 EOF
 
 " Initialise treesitter
@@ -52,49 +71,13 @@ catppuccin.setup {
         functions = "NONE"
     },
     integrations = {
+        nvimtree = {
+            show_root = true
+        },
         lsp_trouble = true,
         lsp_saga = true
     }
 }
-
--- Current workaround for treesitter -> https://github.com/catppuccin/nvim/issues/95
-local cp = require("catppuccin.api.colors").get_colors()
-
-catppuccin.remap({
-  	ErrorMsg = { fg = cp.red, style = "bold" },
-    TSProperty = { fg = cp.yellow, style = "NONE" },
-	TSInclude = { fg = cp.teal, style = "NONE" },
-	TSOperator = { fg = cp.sky, style = "bold" },
-	TSKeywordOperator = { fg = cp.sky, style = "bold" },
-	TSPunctSpecial = { fg = cp.maroon, style = "bold" },
-	TSFloat = { fg = cp.peach, style = "bold" },
-	TSNumber = { fg = cp.peach, style = "bold" },
-	TSBoolean = { fg = cp.peach, style = "bold" },
-	TSConditional = { fg = cp.mauve, style = "bold" },
-	TSRepeat = { fg = cp.mauve, style = "bold" },
-	TSException = { fg = cp.peach, style = "NONE" },
-	TSConstBuiltin = { fg = cp.lavender, style = "NONE" },
-	TSFuncBuiltin = { fg = cp.peach, style = "NONE" },
-	TSTypeBuiltin = { fg = cp.yellow, style = "NONE" },
-	TSVariableBuiltin = { fg = cp.teal, style = "NONE" },
-	TSFunction = { fg = cp.blue, style = "NONE" },
-	TSParameter = { fg = cp.rosewater, style = "NONE" },
-	TSKeywordFunction = { fg = cp.maroon, style = "NONE" },
-	TSKeyword = { fg = cp.red, style = "NONE" },
-	TSMethod = { fg = cp.blue, style = "NONE" },
-	TSNamespace = { fg = cp.rosewater, style = "NONE" },
-	TSStringRegex = { fg = cp.peach, style = "NONE" },
-	TSVariable = { fg = cp.white, style = "NONE" },
-	TSTagAttribute = { fg = cp.mauve, style = "NONE" },
-	TSURI = { fg = cp.rosewater, style = "underline" },
-	TSLiteral = { fg = cp.teal, style = "NONE" },
-	TSEmphasis = { fg = cp.maroon, style = "NONE" },
-	TSStringEscape = { fg = cp.pink, style = "NONE" },
-	bashTSFuncBuiltin = { fg = cp.red, style = "NONE" },
-	bashTSParameter = { fg = cp.yellow, style = "NONE" },
-	typescriptTSProperty = { fg = cp.lavender, style = "NONE" },
-	cssTSProperty = { fg = cp.yellow, style = "NONE" },
-})
 EOF
 
 
@@ -109,35 +92,7 @@ lualine.setup {
 }
 EOF
 
-" Initialise toggleterm
-lua << EOF
-local toggleterm = require("toggleterm")
-
-toggleterm.setup {
-	size = 20,
-	open_mapping = [[<leader>\]],
-	hide_numbers = true,
-	shade_filetypes = {},
-	shade_terminals = true,
-	shading_factor = 2,
-    insert_mappings = true,
-	start_in_insert = true,
-	direction = "float",
-    shell = "powershell",
-    float_opts = {
-        border = "curved",
-        winblend = 0,
-        highlights = {
-            border = "Normal", 
-            background = "Normal"
-        }
-    }
-}
-EOF
-
 " Initialise NvimTree
-let g:nvim_tree_show_icons = {'git': 1,'folders': 1,'files': 1,'folder_arrows': 1}
-
 lua << EOF
 local nvim_tree = require("nvim-tree")
 local tree_cb = require("nvim-tree.config").nvim_tree_callback
@@ -148,6 +103,16 @@ nvim_tree.setup {
   update_to_buf_dir = {
     enable = true,
     auto_open = true,
+  },
+  renderer = {
+    icons = {
+        show = {
+            file = true,
+            git = true,
+            folder = true,
+            folder_arrow = true
+        }
+    }
   },
   diagnostics = {
     enable = true
@@ -175,7 +140,7 @@ nvim_tree.setup {
 }
 EOF
 
-" Gitsigns
+" Gitsigns 
 lua << EOF
 require('gitsigns').setup {
   on_attach = function(bufnr)
@@ -230,7 +195,7 @@ set shortmess+=c
 
 " Have a fixed column for the diagnostics to appear in
 " This removes the jitter when warnings/errors appear
-set signcolumn=yes:1
+set signcolumn=yes
 
 " Set updatetime for CursorHold
 " 300ms of no cursor movement to trigger CursorHold
