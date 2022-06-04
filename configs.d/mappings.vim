@@ -12,11 +12,15 @@ nnoremap <silent> ga    <cmd>lua vim.lsp.buf.code_action()<CR>
 nnoremap <silent> [d <cmd>lua vim.diagnostic.goto_prev()<CR>
 nnoremap <silent> ]d <cmd>lua vim.diagnostic.goto_next()<CR>
 
+" Dashboard
+nmap <Leader>ss :<C-u>SessionSave<CR>
+nmap <Leader>sl :<C-u>SessionLoad<CR>
+
 " Telescope
 nnoremap ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
-nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+nnoremap <leader>fh <cmd>Telescope find_history<cr>
 
 " Lspsaga 
 nnoremap <silent> <space><space> :Lspsaga code_action<CR>
@@ -40,7 +44,6 @@ tnoremap <silent> <leader>l :FloatermNext<CR>
 nnoremap <silent> <leader>\ :FloatermToggle<CR>
 tnoremap <silent> \ <C-\><C-n>
 
-
 " Rust toggle inlay hints
 nnoremap <a-i> :RustToggleInlayHints<cr>
 
@@ -49,17 +52,25 @@ inoremap jj <Esc>
 inoremap JJ <Esc>
 
 " Quick save
-nnoremap <leader>w :w<cr>
+nnoremap <leader>w :w<CR>
+
+" Quick exit
+nnoremap <leader>q :q<CR>
 
 " 0 -> first non-blank character
 nnoremap 0 ^
 
-" Create new line 
-nnoremap <silent> oo o<Esc>
-nnoremap <silent> OO O<Esc>
+" Easy copy/paste from the system clipboard
+nnoremap <leader>y "+yy
+vnoremap <leader>y "+y<CR>
+nnoremap <leader>p "+p
+nnoremap <leader>P "+P
+
+" Create new line without going into INSERT mode
+nnoremap <silent> <C-CR> o<Esc>
 
 " Jump backwards ([) and forwards (])
-nnoremap <silent> <C-[> <c-o>
+nnoremap <silent> <C-[> <C-o>
 nnoremap <silent> <C-]> <C-i>
 
 " Disable AutoPairsShortcutJump being bound to ALT+n

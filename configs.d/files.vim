@@ -10,8 +10,9 @@ set nowb
 set noswapfile
 
 " Enable filetype plugins
-filetype plugin on 
+filetype plugin on
 filetype indent on
+set autoindent
 
 " Set to autoread when file is changed outside of nvim
 set autoread
