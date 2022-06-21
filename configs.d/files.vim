@@ -4,7 +4,7 @@ set wildignore=*.o,*~,*.pyc,*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
 " Set utf8 as standard encoding and en_US as the standard language
 set encoding=utf8
 
-"" Turn backup off, since most stuff is in SVN, git etc. anyway...
+" Turn backup off, since most stuff is in SVN, git etc. anyway...
 set nobackup
 set nowb
 set noswapfile
@@ -14,8 +14,13 @@ filetype plugin on
 filetype indent on
 set autoindent
 
+" Permanent Undo
+set undodir=~\AppData\Local\nvim\.vimdid
+set undofile
+
 " Set to autoread when file is changed outside of nvim
 set autoread
+
 " Trigger 'autoread' when changing buffers
 au FocusGained,BufEnter * checktime
 

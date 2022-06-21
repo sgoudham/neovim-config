@@ -24,13 +24,13 @@ Plug 'glepnir/dashboard-nvim'
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
+Plug 'cljoly/telescope-repo.nvim', { 'branch': 'dev' }
+Plug 'nvim-telescope/telescope-project.nvim'
+Plug 'nvim-telescope/telescope-ui-select.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
 " Git
 Plug 'tpope/vim-fugitive'
 Plug 'lewis6991/gitsigns.nvim'
-
-" Mimic tabs within IDE's
-Plug 'akinsho/bufferline.nvim', { 'tag': 'v2.*' }
 
 call plug#end()

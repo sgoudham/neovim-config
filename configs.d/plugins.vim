@@ -1,16 +1,29 @@
 " Initialise impatient
-lua require('impatient')
+lua require("impatient")
+
+" Initialise autopairs
+lua require("nvim-autopairs").setup()
+
 " Initialise lspsaga
-lua require('lspsaga').setup()
+lua require("lspsaga").setup()
 
-" Initialise bufferline
+" Initialise neovim session manager
 lua << EOF
-local bufferline = require('bufferline')
+require("session_manager").setup {
+    autoload_mode = require("session_manager.config").AutoloadMode.Disabled
+}
+EOF
 
-bufferline.setup {
-    options = {
-        offsets = {{filetype = "NvimTree", text = "File Explorer", text_align = "center"}}
-    }
+" Initialise lsp_signature
+lua << EOF
+require("lsp_signature").on_attach {
+    doc_lines = 0,
+    handler_opts = {
+      border = "rounded"
+    },
+    hint_enable = false,
+    max_width = 100,
+    floating_window_above_cur_line = true
 }
 EOF
 
@@ -24,6 +37,10 @@ treesitter.setup {
     highlight = {
         enable = true,
         additional_vim_regex_highlighting = false
+    },
+    rainbow = {
+        enable = true,
+        extended_mode = true
     }
 }
 EOF
@@ -40,6 +57,9 @@ require("telescope").setup {
     }
 }
 require("telescope").load_extension("fzf")
+require("telescope").load_extension("ui-select")
+require("telescope").load_extension("project")
+require("telescope").load_extension("repo")
 EOF
 
 " Initialise autosave
@@ -57,7 +77,7 @@ local lualine = require("lualine")
 
 lualine.setup {
   options = {
-    theme = "catppuccin"
+      theme = "catppuccin"
   }
 }
 EOF
@@ -88,8 +108,7 @@ nvim_tree.setup {
     enable = true
   },
   update_focused_file = {
-    enable = true,
-    update_cwd = true
+    enable = true
   },
   view = {
     width = 30,
@@ -151,27 +170,6 @@ require('gitsigns').setup {
 }
 EOF
 
-" Initialise catppuccin
-lua << EOF
-local catppuccin = require("catppuccin")
-
-catppuccin.setup {
-    term_colors = true,
-    styles = {
-        variables = "NONE",
-        keywords = "NONE",
-        functions = "NONE"
-    },
-    integrations = {
-        nvimtree = {
-            show_root = true
-        },
-        lsp_trouble = true,
-        lsp_saga = true
-    }
-}
-EOF
-
 " Floaterm
 let g:floaterm_shell="powershell.exe"
 let g:floaterm_width=0.8
@@ -179,36 +177,71 @@ let g:floaterm_height=0.8
 " Set floaterm window foreground to gray once the cursor moves out from it
 hi FloatermNC guifg=gray
 
-" Dashboard
-let g:dashboard_default_executive='telescope'
-let g:dashboard_custom_shortcut={
-\ 'last_session'       : '<leader> s l',
-\ 'find_history'       : '<leader> f h',
-\ 'find_file'          : '         f f',
-\ 'find_word'          : '<leader> f g',
-\ 'new_file'           : '            ',
-\ 'change_colorscheme' : '            ',
-\ 'book_marks'         : '            ',
-\ }
-let g:dashboard_custom_header=[
-    \'',
-    \'    ⢰⣧⣼⣯⠄⣸⣠⣶⣶⣦⣾⠄⠄⠄⠄⡀⠄⢀⣿⣿⠄⠄⠄⢸⡇⠄⠄ ',
-    \'    ⣾⣿⠿⠿⠶⠿⢿⣿⣿⣿⣿⣦⣤⣄⢀⡅⢠⣾⣛⡉⠄⠄⠄⠸⢀⣿⠄ ',
-    \'   ⢀⡋⣡⣴⣶⣶⡀⠄⠄⠙⢿⣿⣿⣿⣿⣿⣴⣿⣿⣿⢃⣤⣄⣀⣥⣿⣿⠄ ',
-    \'   ⢸⣇⠻⣿⣿⣿⣧⣀⢀⣠⡌⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠿⠿⣿⣿⣿⠄ ',
-    \'  ⢀⢸⣿⣷⣤⣤⣤⣬⣙⣛⢿⣿⣿⣿⣿⣿⣿⡿⣿⣿⡍⠄⠄⢀⣤⣄⠉⠋⣰ ',
-    \'  ⣼⣖⣿⣿⣿⣿⣿⣿⣿⣿⣿⢿⣿⣿⣿⣿⣿⢇⣿⣿⡷⠶⠶⢿⣿⣿⠇⢀⣤ ',
-    \' ⠘⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣽⣿⣿⣿⡇⣿⣿⣿⣿⣿⣿⣷⣶⣥⣴⣿⡗ ',
-    \' ⢀⠈⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟  ',
-    \' ⢸⣿⣦⣌⣛⣻⣿⣿⣧⠙⠛⠛⡭⠅⠒⠦⠭⣭⡻⣿⣿⣿⣿⣿⣿⣿⣿⡿⠃  ',
-    \' ⠘⣿⣿⣿⣿⣿⣿⣿⣿⡆⠄⠄⠄⠄⠄⠄⠄⠄⠹⠈⢋⣽⣿⣿⣿⣿⣵⣾⠃  ',
-    \'  ⠘⣿⣿⣿⣿⣿⣿⣿⣿⠄⣴⣿⣶⣄⠄⣴⣶⠄⢀⣾⣿⣿⣿⣿⣿⣿⠃   ',
-    \'   ⠈⠻⣿⣿⣿⣿⣿⣿⡄⢻⣿⣿⣿⠄⣿⣿⡀⣾⣿⣿⣿⣿⣛⠛⠁    ',
-    \'     ⠈⠛⢿⣿⣿⣿⠁⠞⢿⣿⣿⡄⢿⣿⡇⣸⣿⣿⠿⠛⠁      ',
-    \'        ⠉⠻⣿⣿⣾⣦⡙⠻⣷⣾⣿⠃⠿⠋⠁     ⢀⣠⣴ ',
-    \' ⣿⣿⣿⣶⣶⣮⣥⣒⠲⢮⣝⡿⣿⣿⡆⣿⡿⠃⠄⠄⠄⠄⠄⠄⠄⣠⣴⣿⣿⣿ ',
-    \'',
-    \]
+" Initialise Dashboard
+lua << EOF
+local dashboard = require("dashboard")
+
+dashboard.custom_header = {
+        '                                                       ',
+        '                                                       ',
+        ' ███╗   ██╗ ███████╗ ██████╗  ██╗   ██╗ ██╗ ███╗   ███╗',
+        ' ████╗  ██║ ██╔════╝██╔═══██╗ ██║   ██║ ██║ ████╗ ████║',
+        ' ██╔██╗ ██║ █████╗  ██║   ██║ ██║   ██║ ██║ ██╔████╔██║',
+        ' ██║╚██╗██║ ██╔══╝  ██║   ██║ ╚██╗ ██╔╝ ██║ ██║╚██╔╝██║',
+        ' ██║ ╚████║ ███████╗╚██████╔╝  ╚████╔╝  ██║ ██║ ╚═╝ ██║',
+        ' ╚═╝  ╚═══╝ ╚══════╝ ╚═════╝    ╚═══╝   ╚═╝ ╚═╝     ╚═╝',
+        '                                                       ',
+        '              ⢰⣧⣼⣯⠄⣸⣠⣶⣶⣦⣾⠄⠄⠄⠄⡀⠄⢀⣿⣿⠄⠄⠄⢸⡇⠄⠄              ',
+        '              ⣾⣿⠿⠿⠶⠿⢿⣿⣿⣿⣿⣦⣤⣄⢀⡅⢠⣾⣛⡉⠄⠄⠄⠸⢀⣿⠄              ',
+        '             ⢀⡋⣡⣴⣶⣶⡀⠄⠄⠙⢿⣿⣿⣿⣿⣿⣴⣿⣿⣿⢃⣤⣄⣀⣥⣿⣿⠄              ',
+        '             ⢸⣇⠻⣿⣿⣿⣧⣀⢀⣠⡌⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠿⠿⣿⣿⣿⠄              ',
+        '            ⢀⢸⣿⣷⣤⣤⣤⣬⣙⣛⢿⣿⣿⣿⣿⣿⣿⡿⣿⣿⡍⠄⠄⢀⣤⣄⠉⠋⣰              ',
+        '            ⣼⣖⣿⣿⣿⣿⣿⣿⣿⣿⣿⢿⣿⣿⣿⣿⣿⢇⣿⣿⡷⠶⠶⢿⣿⣿⠇⢀⣤              ',
+        '           ⠘⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣽⣿⣿⣿⡇⣿⣿⣿⣿⣿⣿⣷⣶⣥⣴⣿⡗              ',
+        '           ⢀⠈⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟               ',
+        '           ⢸⣿⣦⣌⣛⣻⣿⣿⣧⠙⠛⠛⡭⠅⠒⠦⠭⣭⡻⣿⣿⣿⣿⣿⣿⣿⣿⡿⠃               ',
+        '           ⠘⣿⣿⣿⣿⣿⣿⣿⣿⡆⠄⠄⠄⠄⠄⠄⠄⠄⠹⠈⢋⣽⣿⣿⣿⣿⣵⣾⠃               ',
+        '            ⠘⣿⣿⣿⣿⣿⣿⣿⣿⠄⣴⣿⣶⣄⠄⣴⣶⠄⢀⣾⣿⣿⣿⣿⣿⣿⠃                ',
+        '             ⠈⠻⣿⣿⣿⣿⣿⣿⡄⢻⣿⣿⣿⠄⣿⣿⡀⣾⣿⣿⣿⣿⣛⠛⠁                 ',
+        '               ⠈⠛⢿⣿⣿⣿⠁⠞⢿⣿⣿⡄⢿⣿⡇⣸⣿⣿⠿⠛⠁                   ',
+        '                  ⠉⠻⣿⣿⣾⣦⡙⠻⣷⣾⣿⠃⠿⠋⠁     ⢀⣠⣴              ',
+        '           ⣿⣿⣿⣶⣶⣮⣥⣒⠲⢮⣝⡿⣿⣿⡆⣿⡿⠃⠄⠄⠄⠄⠄⠄⠄⣠⣴⣿⣿⣿              ',
+        '                                                       ',
+        '                                                       ', 
+}
+dashboard.custom_center = {
+    { 
+        icon = '',
+        desc = 'Load session                         ',
+        shortcut = '<leader> l s',
+        action = ':SessionManager load_session'
+    },
+    { 
+        icon = '',
+        desc = 'Load Last Session                    ',
+        shortcut = '<leader> s l',
+        action = ':SessionManager load_last_session'
+    },
+    { 
+        icon = '',
+        desc = 'Open Project                         ',
+        shortcut = '<leader> c d',
+        action = ":lua require'telescope'.extensions.project.project{}"
+    },
+    { 
+        icon = '',
+        desc = 'Open Terminal                        ',
+        shortcut = '<leader> n  ',
+        action = ':PlugUpdate'
+    },
+    { 
+        icon = '',
+        desc = 'Update Plugins                       ',
+        shortcut = ':PlugUpdate ',
+        action = ':PlugUpdate'
+    }
+}
+EOF
 
 " Quit Nvim if NvimTree is the last window
 autocmd BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif
@@ -229,8 +262,6 @@ set signcolumn=yes
 " Set updatetime for CursorHold
 " 300ms of no cursor movement to trigger CursorHold
 set updatetime=300
-" Show diagnostic popup on cursor hover
-autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false, border = 'rounded', })
 
 
 " Configure LSP through rust-tools.nvim plugin.
@@ -249,10 +280,10 @@ require('rust-tools').setup {
         },
         inlay_hints = {
             show_parameter_hints = false,
-            other_hints_prefix = "<< "
+            other_hints_prefix = "<< ",
             -- Enable following config when https://github.com/simrat39/rust-tools.nvim/issues/197 is resolved
-            -- only_current_line = true,
-            -- only_current_line_autocmd = "CursorMoved,CursorMovedI"
+            only_current_line = true,
+            only_current_line_autocmd = "CursorMoved,CursorMovedI"
         },
     },
 
@@ -263,12 +294,11 @@ require('rust-tools').setup {
             -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
             ["rust-analyzer"] = {
                 checkOnSave = {
-                    command = "clippy",
-                    allFeatures = true
+                    command = "clippy"
                 },
                 completion = {
                     callable = {
-                        snippets = "add_parentheses"
+                        snippets = "fill_arguments"
                     }
                 }
             }
@@ -277,23 +307,19 @@ require('rust-tools').setup {
 }
 EOF
 
-" Initialise lsp_signature
-lua << EOF
-require('lsp_signature').on_attach {
-    doc_lines = 0,
-    handler_opts = {
-      border = "rounded"
-    },
-    hint_enable = false,
-    max_width = 100,
-    floating_window_above_cur_line = true
-}
-EOF
-
 " Setup Completion
 " See https://github.com/hrsh7th/nvim-cmp#basic-configuration
 lua << EOF
 local cmp = require('cmp')
+
+local has_words_before = function()
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+end
+
+local feedkey = function(key, mode)
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
+end
 
 cmp.setup {
   snippet = {
@@ -313,19 +339,24 @@ cmp.setup {
         select = true,
     },
     ["<Tab>"] = cmp.mapping(function(fallback)
-        -- This little snippet will confirm with tab, and if no entry is selected, will confirm the first item
-        if cmp.visible() then
-            local entry = cmp.get_selected_entry()
-    	if not entry then
-    	  cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
-    	else
-    	  cmp.confirm()
-    	end
-          else
-            fallback()
-          end
-        end, {"i","s"}
-    )
+      if cmp.visible() then
+        cmp.select_next_item()
+      elseif vim.fn["vsnip#available"](1) == 1 then
+        feedkey("<Plug>(vsnip-expand-or-jump)", "")
+      elseif has_words_before() then
+        cmp.complete()
+      else
+        fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
+      end
+    end, { "i", "s" }),
+
+    ["<S-Tab>"] = cmp.mapping(function()
+      if cmp.visible() then
+        cmp.select_prev_item()
+      elseif vim.fn["vsnip#jumpable"](-1) == 1 then
+        feedkey("<Plug>(vsnip-jump-prev)", "")
+      end
+    end, { "i", "s" }),
   },
 
   sources = {
@@ -340,3 +371,4 @@ cmp.setup {
   }
 }
 EOF
+

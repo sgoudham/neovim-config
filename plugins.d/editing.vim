@@ -1,8 +1,11 @@
 " Allows for easy surrounding of text
-Plug 'tpope/vim-surround'
+Plug 'machakann/vim-sandwich'
 
 " Auto pairs for '(' '[' '{'
-Plug 'jiangmiao/auto-pairs'
+Plug 'windwp/nvim-autopairs'
 
 " Comment out lines easily
 Plug 'tpope/vim-commentary'
+
+" Markdown preview
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }

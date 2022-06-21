@@ -1,38 +1,52 @@
+" Dynamically change font size with arrow keys
+nnoremap <Left> :call AdjustFontSize(-1)<CR>
+nnoremap <Right> :call AdjustFontSize(+1)<CR>
+
 " LSP
-nnoremap <silent> fc    <cmd>lua vim.lsp.buf.formatting()<CR>
-nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
-nnoremap <silent> gi    <cmd>lua vim.lsp.buf.implementation()<CR>
-nnoremap <silent> <C-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
-nnoremap <silent> gs    <cmd>lua vim.lsp.buf.type_definition()<CR>
-nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
-nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
-nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
-nnoremap <silent> gd    <cmd>lua vim.lsp.buf.definition()<CR>
-nnoremap <silent> ga    <cmd>lua vim.lsp.buf.code_action()<CR>
-nnoremap <silent> [d <cmd>lua vim.diagnostic.goto_prev()<CR>
-nnoremap <silent> ]d <cmd>lua vim.diagnostic.goto_next()<CR>
+nnoremap <silent> fc        :lua vim.lsp.buf.formatting()<CR>
+nnoremap <silent> K         :lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> gi        :lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> <C-k>     :lua vim.lsp.buf.signature_help()<CR>
+nnoremap <silent> gs        :lua vim.lsp.buf.type_definition()<CR>
+nnoremap <silent> gr        :lua vim.lsp.buf.references()<CR>
+nnoremap <silent> g0        :lua vim.lsp.buf.document_symbol()<CR>
+nnoremap <silent> gW        :lua vim.lsp.buf.workspace_symbol()<CR>
+nnoremap <silent> gd        :lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> gD        :lua vim.lsp.buf.declaration()<CR>
+nnoremap <silent> ga        :lua vim.lsp.buf.code_action()<CR>
+nnoremap <silent> <space>e  :lua vim.diagnostic.open_float(nil, { focusable = false, border = 'rounded' })<CR>
+nnoremap <silent> [d        :lua vim.diagnostic.goto_prev()<CR>
+nnoremap <silent> ]d        :lua vim.diagnostic.goto_next()<CR>
+imap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
+smap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
+imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+smap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
 
 " Dashboard
-nmap <Leader>ss :<C-u>SessionSave<CR>
-nmap <Leader>sl :<C-u>SessionLoad<CR>
+nmap <Leader>ss :SessionManager save_current_session<CR>
+nmap <Leader>sd :SessionManager delete_session<CR>
+nmap <Leader>sl :SessionManager load_last_session<CR>
+nmap <Leader>ls :SessionManager load_session<CR>
 
 " Telescope
-nnoremap ff <cmd>Telescope find_files<cr>
-nnoremap <leader>fg <cmd>Telescope live_grep<cr>
-nnoremap <leader>fb <cmd>Telescope buffers<cr>
-nnoremap <leader>fh <cmd>Telescope find_history<cr>
+nnoremap <leader>ff :Telescope find_files<cr>
+nnoremap <leader>fg :Telescope live_grep<cr>
+nnoremap <leader>fb :Telescope buffers<cr>
+nnoremap <leader>fh :Telescope find_history<cr>
+" Telescope project
+nnoremap <leader>cd :lua require'telescope'.extensions.project.project{}<CR>
 
 " Lspsaga 
-nnoremap <silent> <space><space> :Lspsaga code_action<CR>
-vnoremap <silent> <space><space> :<C-U>Lspsaga range_code_action<CR>
-nnoremap <silent> <leader>r :Lspsaga rename<CR>
+nnoremap <silent> <space><space>    :Lspsaga code_action<CR>
+vnoremap <silent> <space><space>    :<C-U>Lspsaga range_code_action<CR>
+nnoremap <silent> <leader>r         :Lspsaga rename<CR>
 
 " NvimTree
 nnoremap <C-n> :NvimTreeToggle<CR>
-
-" Bufferline
-nnoremap <silent> H :BufferLineCyclePrev<CR>
-nnoremap <silent> L :BufferLineCycleNext<CR>
 
 " Floaterm
 nnoremap <silent> <leader>n :FloatermNew<CR>
@@ -67,7 +81,7 @@ nnoremap <leader>p "+p
 nnoremap <leader>P "+P
 
 " Create new line without going into INSERT mode
-nnoremap <silent> <C-CR> o<Esc>
+nnoremap <silent> <CR> o<ESC>
 
 " Jump backwards ([) and forwards (])
 nnoremap <silent> <C-[> <C-o>
