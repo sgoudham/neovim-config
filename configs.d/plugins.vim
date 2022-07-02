@@ -5,7 +5,25 @@ lua require("impatient")
 lua require("nvim-autopairs").setup()
 
 " Initialise lspsaga
-lua require("lspsaga").setup()
+lua << EOF
+local lspsaga = require("lspsaga")
+
+lspsaga.init_lsp_saga {
+    move_in_saga = {
+        prev = 'k',
+        next = 'j'
+    },
+    code_action_lightbulb = {
+        enable = false    
+    },
+    finder_action_keys = {
+        open = '<CR>',
+        quit = '<ESC>',
+        scroll_down = '<A-j',
+        scroll_up = 'A-k'
+    }
+}
+EOF
 
 " Initialise neovim session manager
 lua << EOF
@@ -48,11 +66,14 @@ EOF
 " Initialise telescope
 lua << EOF
 require("telescope").setup {
+    pickers = {
+        find_files = {
+            hidden = true
+        }
+    },
     defaults = {
-        mappings = {
-            i = {
-                ["<ESC>"] = require("telescope.actions").close
-            }
+        file_ignore_patterns = {
+            ".git\\"
         }
     }
 }
@@ -89,8 +110,8 @@ local tree_cb = require("nvim-tree.config").nvim_tree_callback
 
 nvim_tree.setup {
   disable_netrw = true,
-  update_cwd = true,
-  update_to_buf_dir = {
+  sync_root_with_cwd = true,
+  hijack_directories = {
     enable = true,
     auto_open = true,
   },
@@ -115,7 +136,6 @@ nvim_tree.setup {
     height = 30,
     hide_root_folder = false,
     side = "left",
-    auto_resize = true,
     mappings = {
       custom_only = false,
       list = {

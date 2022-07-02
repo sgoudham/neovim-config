@@ -11,10 +11,10 @@ nnoremap <silent> gs        :lua vim.lsp.buf.type_definition()<CR>
 nnoremap <silent> gr        :lua vim.lsp.buf.references()<CR>
 nnoremap <silent> g0        :lua vim.lsp.buf.document_symbol()<CR>
 nnoremap <silent> gW        :lua vim.lsp.buf.workspace_symbol()<CR>
-nnoremap <silent> gd        :lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> gd        :Lspsaga lsp_finder<CR>
 nnoremap <silent> gD        :lua vim.lsp.buf.declaration()<CR>
 nnoremap <silent> ga        :lua vim.lsp.buf.code_action()<CR>
-nnoremap <silent> <space>e  :lua vim.diagnostic.open_float(nil, { focusable = false, border = 'rounded' })<CR>
+nnoremap <silent> <space>e  :Lspsaga show_line_diagnostics<CR>
 nnoremap <silent> [d        :lua vim.diagnostic.goto_prev()<CR>
 nnoremap <silent> ]d        :lua vim.diagnostic.goto_next()<CR>
 imap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
@@ -26,17 +26,18 @@ smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab
 imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
 smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
 
-" Dashboard
+" Session manager
 nmap <Leader>ss :SessionManager save_current_session<CR>
 nmap <Leader>sd :SessionManager delete_session<CR>
 nmap <Leader>sl :SessionManager load_last_session<CR>
 nmap <Leader>ls :SessionManager load_session<CR>
 
 " Telescope
-nnoremap <leader>ff :Telescope find_files<cr>
-nnoremap <leader>fg :Telescope live_grep<cr>
-nnoremap <leader>fb :Telescope buffers<cr>
-nnoremap <leader>fh :Telescope find_history<cr>
+nnoremap <leader>ff :lua require("telescope.builtin").find_files()<CR>
+nnoremap <leader>fg :lua require("telescope.builtin").live_grep()<CR>
+nnoremap <leader>fc :lua require("telescope.builtin").live_grep({ search_dirs = { vim.fn.expand("%:p") } })<CR>
+nnoremap <leader>fb :lua require("telescope.builtin").buffers()<CR>
+nnoremap <leader>fh :lua require("telescope.builtin").help_tags()<CR>
 " Telescope project
 nnoremap <leader>cd :lua require'telescope'.extensions.project.project{}<CR>
 
@@ -58,12 +59,9 @@ tnoremap <silent> <leader>l :FloatermNext<CR>
 nnoremap <silent> <leader>\ :FloatermToggle<CR>
 tnoremap <silent> \ <C-\><C-n>
 
-" Rust toggle inlay hints
-nnoremap <a-i> :RustToggleInlayHints<cr>
-
-" Exit in and out of insert mode easily
-inoremap jj <Esc>
-inoremap JJ <Esc>
+" Rust tools
+nnoremap <leader>t :RustRunnables<CR>
+nnoremap <A-i> :RustToggleInlayHints<CR>
 
 " Quick save
 nnoremap <leader>w :w<CR>
