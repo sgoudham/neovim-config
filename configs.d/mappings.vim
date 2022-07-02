@@ -33,11 +33,13 @@ nmap <Leader>sl :SessionManager load_last_session<CR>
 nmap <Leader>ls :SessionManager load_session<CR>
 
 " Telescope
-nnoremap <leader>ff :lua require("telescope.builtin").find_files()<CR>
-nnoremap <leader>fg :lua require("telescope.builtin").live_grep()<CR>
-nnoremap <leader>fc :lua require("telescope.builtin").live_grep({ search_dirs = { vim.fn.expand("%:p") } })<CR>
 nnoremap <leader>fb :lua require("telescope.builtin").buffers()<CR>
 nnoremap <leader>fh :lua require("telescope.builtin").help_tags()<CR>
+nnoremap <leader>ff :lua require("telescope.builtin").find_files()<CR>
+" Find string over entire project directory
+nnoremap <leader>fg :lua require("telescope.builtin").live_grep()<CR>
+" Find string over the current file
+nnoremap <leader>fc :lua require("telescope.builtin").live_grep({ search_dirs = { vim.fn.expand("%:p") } })<CR>
 " Telescope project
 nnoremap <leader>cd :lua require'telescope'.extensions.project.project{}<CR>
 
