@@ -9,18 +9,22 @@ lua << EOF
 local lspsaga = require("lspsaga")
 
 lspsaga.init_lsp_saga {
-    move_in_saga = {
-        prev = 'k',
-        next = 'j'
+    move_in_saga = { 
+        prev = 'k', 
+        next = 'j' 
     },
     code_action_lightbulb = {
         enable = false    
     },
+    max_preview_lines = 50,
     finder_action_keys = {
         open = '<CR>',
         quit = '<ESC>',
-        scroll_down = '<A-j',
-        scroll_up = 'A-k'
+        scroll_down = '<A-j>',
+        scroll_up = '<A-k>'
+    },
+    code_action_keys = {
+        quit = '<ESC>'     
     }
 }
 EOF
