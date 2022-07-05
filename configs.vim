@@ -3,7 +3,7 @@ set termguicolors
 
 " For whatever reason, the catppuccin config only works at setup if placed _right_ here 
 " Maybe related to --> https://github.com/catppuccin/nvim/issues/136 ?
-
+"
 " Initialise catppuccin
 lua << EOF
 local catppuccin = require("catppuccin")
@@ -67,56 +67,15 @@ catppuccin.remap({
  	TSLiteral = { style = "NONE" },
  	TSEmphasis = { style = "NONE" },
  	TSStringEscape = { style = "NONE" },
- 	bashTSFuncBuiltin = { fg = cp.red, style = "NONE" },
- 	bashTSParameter = { fg = cp.yellow, style = "NONE" },
- 	typescriptTSProperty = { fg = cp.lavender, style = "NONE" },
- 	cssTSProperty = { fg = cp.yellow, style = "NONE" },
     DiagnosticInfo = { style = "NONE", bg = "NONE" },
     DiagnosticError = { style = "NONE", bg = "NONE" },
     DiagnosticHint = { style = "NONE", bg = "NONE" },
     DiagnosticWarn = { style = "NONE", bg = "NONE" },
+    LspSagaDiagnosticBorder = { fg = cp.blue },
+    LspSagaDiagnosticHeader = { fg = cp.lavender },
 })
 EOF
 
-" hi TSComment gui=NONE
-" hi TSFuncMacro gui=NONE
-" hi TSProperty gui=NONE
-" hi TSInclude gui=NONE
-" hi TSOperator gui=bold
-" hi TSKeywordOperator gui=bold
-" hi TSPunctSpecial gui=bold
-" hi TSFloat gui=bold
-" hi TSNumber gui=bold
-" hi TSBoolean gui=bold
-" hi TSConditional gui=bold
-" hi TSRepeat gui=bold
-" hi TSException gui=NONE
-" hi TSConstBuiltin gui=NONE
-" hi TSFuncBuiltin gui=NONE
-" hi TSTypeBuiltin gui=NONE
-" hi TSVariableBuiltin gui=NONE
-" hi TSFunction gui=NONE
-" hi TSParameter gui=NONE
-" hi TSKeywordFunction gui=NONE
-" hi TSKeyword gui=NONE
-" hi TSMethod gui=NONE
-" hi TSNamespace gui=NONE
-" hi TSStringRegex gui=NONE
-" hi TSVariable gui=NONE
-" hi TSTagAttribute gui=NONE
-" hi TSURI gui=underline
-" hi TSLiteral gui=NONE
-" hi TSEmphasis gui=NONE
-" hi TSStringEscape gui=NONE
-" hi bashTSFuncBuiltin gui=NONE
-" hi bashTSParameter gui=NONE
-" hi typescriptTSProperty gui=NONE
-" hi cssTSProperty gui=NONE
-" hi DiagnosticInfo gui=NONE
-" hi DiagnosticError gui=NONE
-" hi DiagnosticHint gui=NONE
-" hi DiagnosticWarn gui=NONE
-"
 " Self-explanatory
 let g:catppuccin_flavour = "mocha"
 colorscheme catppuccin
@@ -223,9 +182,11 @@ set ai "Auto indent
 set si "Smart indent
 set wrap "Wrap lines
 
+set conceallevel=2
+
 " Allow dynamically changing font size
-let s:guifontsize=9
-let s:guifont="JetBrainsMono\\ NF"
+let s:guifontsize=11
+let s:guifont="OperatorMono\\ NF"
 
 fun! AdjustFontSize(amount)
     let s:guifontsize = s:guifontsize + a:amount

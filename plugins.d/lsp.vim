@@ -1,4 +1,5 @@
 " NeoVim LSP client
+Plug 'williamboman/nvim-lsp-installer'
 Plug 'neovim/nvim-lspconfig'
 Plug 'glepnir/lspsaga.nvim'
 Plug 'ray-x/lsp_signature.nvim'
@@ -15,6 +16,7 @@ Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-cmdline'
 
 " Enable rust inlay hints & more
 Plug 'simrat39/rust-tools.nvim', { 'branch': 'modularize_and_inlay_rewrite' }

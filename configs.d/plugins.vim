@@ -4,6 +4,15 @@ lua require("impatient")
 " Initialise autopairs
 lua require("nvim-autopairs").setup()
 
+" Initialise dressing.nvim
+lua << EOF
+require("dressing").setup {
+    input = {
+        insert_only = false
+    }
+}
+EOF
+
 " Initialise lspsaga
 lua << EOF
 local lspsaga = require("lspsaga")
@@ -76,8 +85,25 @@ require("telescope").setup {
         }
     },
     defaults = {
+        layout_strategy = 'horizontal',
+        layout_config = {
+            vertical = {
+                width = 0.5
+            }
+        },
         file_ignore_patterns = {
             ".git\\"
+        },
+        mappings = {
+            n = {
+                ["<A-j>"] = require("telescope.actions").preview_scrolling_down,
+                ["<A-k>"] = require("telescope.actions").preview_scrolling_up
+            }
+        }
+    },
+    extensions = {
+        ['ui-select'] = {
+            require("telescope.themes").get_dropdown{}
         }
     }
 }
@@ -287,15 +313,41 @@ set signcolumn=yes
 " 300ms of no cursor movement to trigger CursorHold
 set updatetime=300
 
-
 " Configure LSP through rust-tools.nvim plugin.
 " rust-tools will configure and enable certain LSP features for us.
 " See https://github.com/simrat39/rust-tools.nvim#configuration
 lua << EOF
-local nvim_lsp = require('lspconfig')
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local on_attach = function(client, bufnr)
+    local bufopts = { noremap=true, silent=true, buffer=bufnr }
+    vim.keymap.set('n', 'fc', vim.lsp.buf.formatting, bufopts)
+    vim.keymap.set('n', 'gs', vim.lsp.buf.type_definition, bufopts)
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+    vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+    vim.keymap.set("n", "<space><space>", vim.lsp.buf.code_action, bufopts)
+    vim.keymap.set('n', '<space>e', require("lspsaga.diagnostic").show_line_diagnostics, bufopts)
+    vim.keymap.set("n", "[d", require("lspsaga.diagnostic").goto_prev, bufopts)
+    vim.keymap.set("n", "]d", require("lspsaga.diagnostic").goto_next, bufopts)
+    vim.keymap.set('n', '<leader>r', vim.lsp.buf.rename, bufopts)
+    vim.keymap.set('n', 'gd', require("telescope.builtin").lsp_references, bufopts)
+    vim.keymap.set('n', '<leader>e', require("telescope.builtin").diagnostics, bufopts)
+end
 
-require('rust-tools').setup {
+-- Always make sure to include this at the BEGINNING
+require("nvim-lsp-installer").setup{
+    ensure_installed = {
+        "rust_analyzer", 
+        "vimls",
+        "jsonls",
+        "marksman",
+        "sumneko_lua"
+    }
+}
+
+local nvim_lsp = require("lspconfig")
+local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
+
+-- RUST-ANALYZER
+require("rust-tools").setup {
     tools = {
         autoSetHints = true,
         hover_with_actions = true,
@@ -313,6 +365,7 @@ require('rust-tools').setup {
 
     -- See https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md#rust_analyzer
     server = {
+        on_attach = on_attach,
         capabilities = capabilities,
         settings = {
             -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
@@ -328,6 +381,58 @@ require('rust-tools').setup {
             }
         }
     }
+}
+
+-- JSONLS
+-- Enable (broadcasting) snippet capability for completion
+local json_capabilities = vim.lsp.protocol.make_client_capabilities()
+json_capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+nvim_lsp.jsonls.setup {
+    on_attach = on_attach,
+    capabilities = json_capabilities,
+}
+
+-- VIMLS
+nvim_lsp.vimls.setup{
+    on_attach = on_attach,
+    capabilities = capabilities,
+    diagnostic = {
+        enable = true
+    },
+    isNeovim = true
+}
+
+-- MARKSMAN
+nvim_lsp.marksman.setup{
+    on_attach = on_attach,
+    capabilities = capabilities,
+}
+
+-- SUMNEKO_LUA
+nvim_lsp.sumneko_lua.setup {
+    on_attach = on_attach,
+    capabilities = capabilities,
+    settings = {
+        Lua = {
+            runtime = {
+                -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+                version = 'LuaJIT',
+            },
+            diagnostics = {
+                -- Get the language server to recognize the `vim` global
+                globals = {'vim'},
+            },
+            workspace = {
+                -- Make the server aware of Neovim runtime files
+                library = vim.api.nvim_get_runtime_file("", true),
+            },
+            -- Do not send telemetry data containing a randomized but unique identifier
+            telemetry = {
+                enable = false,
+            },
+        },
+    },
 }
 EOF
 
@@ -353,11 +458,11 @@ cmp.setup {
   },
 
   mapping = {
-    ['<A-k>'] = cmp.mapping.select_prev_item(),
-    ['<A-j>'] = cmp.mapping.select_next_item(),
+    ['<A-k>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 'c' }),
+    ['<A-j>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 'c' }),
     ['<A-p>'] = cmp.mapping.scroll_docs(-4),
     ['<A-n>'] = cmp.mapping.scroll_docs(4),
-    ['<C-e>'] = cmp.mapping.close(),
+    ['<C-e>'] = cmp.mapping(cmp.mapping.close(), { 'i', 'c' }),
     ['<CR>'] = cmp.mapping.confirm {
         behavior = cmp.ConfirmBehavior.Insert,
         select = true,
@@ -394,5 +499,14 @@ cmp.setup {
     ghost_text = true
   }
 }
+
+cmp.setup.cmdline(':', {
+    sources = {
+        { name = 'cmdline' }
+    }
+})
 EOF
+
+" Initialise vim-markdown
+let g:vim_markdown_folding_disabled=1
 
