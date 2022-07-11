@@ -30,6 +30,17 @@ local function lsp_keymaps(client, bufnr)
     keymap(bufnr, "n", "<leader>r", ":lua vim.lsp.buf.rename()<CR>", opts)
     keymap(bufnr, "n", "<C-k>", ":lua vim.lsp.buf.signature_help()<CR>", opts)
 
+    require("lsp_signature").on_attach({
+        bind = true,
+        doc_lines = 0,
+        handler_opts = {
+            border = "rounded"
+        },
+        hint_enable = false,
+        max_width = 100,
+        floating_window_above_cur_line = true
+    }, bufnr)
+
     if client.name == "rust_analyzer" then
         keymap(bufnr, "n", "<leader>t", ":RustRunnables<CR>", opts)
     end
