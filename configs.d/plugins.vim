@@ -13,31 +13,6 @@ require("dressing").setup {
 }
 EOF
 
-" Initialise lspsaga
-lua << EOF
-local lspsaga = require("lspsaga")
-
-lspsaga.init_lsp_saga {
-    move_in_saga = { 
-        prev = 'k', 
-        next = 'j' 
-    },
-    code_action_lightbulb = {
-        enable = false    
-    },
-    max_preview_lines = 50,
-    finder_action_keys = {
-        open = '<CR>',
-        quit = '<ESC>',
-        scroll_down = '<A-j>',
-        scroll_up = '<A-k>'
-    },
-    code_action_keys = {
-        quit = '<ESC>'     
-    }
-}
-EOF
-
 " Initialise neovim session manager
 lua << EOF
 require("session_manager").setup {
@@ -81,14 +56,24 @@ lua << EOF
 require("telescope").setup {
     pickers = {
         find_files = {
-            hidden = true
+            hidden = true,
+            theme = 'dropdown'
+        },
+        live_grep = {
+            theme = 'dropdown'
+        },
+        lsp_references = {
+            theme = 'dropdown'
+        },
+        diagnostics = {
+            theme = 'dropdown'
         }
     },
     defaults = {
-        layout_strategy = 'horizontal',
+        layout_strategy = 'center',
         layout_config = {
-            vertical = {
-                width = 0.5
+            center = {
+                anchor = 'S'
             }
         },
         file_ignore_patterns = {
@@ -104,6 +89,9 @@ require("telescope").setup {
     extensions = {
         ['ui-select'] = {
             require("telescope.themes").get_dropdown{}
+        },
+        project = {
+            theme = 'dropdown'
         }
     }
 }
@@ -263,32 +251,38 @@ dashboard.custom_center = {
     { 
         icon = '',
         desc = 'Load session                         ',
-        shortcut = '<leader> l s',
+        shortcut = '<leader> l s             ',
         action = ':SessionManager load_session'
     },
     { 
         icon = '',
         desc = 'Load Last Session                    ',
-        shortcut = '<leader> s l',
+        shortcut = '<leader> s l             ',
         action = ':SessionManager load_last_session'
     },
     { 
         icon = '',
         desc = 'Open Project                         ',
-        shortcut = '<leader> c d',
+        shortcut = '<leader> c d             ',
         action = ":lua require'telescope'.extensions.project.project{}"
     },
     { 
         icon = '',
         desc = 'Open Terminal                        ',
-        shortcut = '<leader> n  ',
+        shortcut = '<leader> n               ',
         action = ':PlugUpdate'
     },
     { 
         icon = '',
         desc = 'Update Plugins                       ',
-        shortcut = ':PlugUpdate ',
+        shortcut = ':PlugUpdate              ',
         action = ':PlugUpdate'
+    },
+    {
+        icon = '',
+        desc = 'View Installed LSP Servers           ',
+        shortcut = ':LspInstallInfo          ',
+        action = ':LspInstallInfo'
     }
 }
 EOF
@@ -324,13 +318,19 @@ local on_attach = function(client, bufnr)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
     vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
     vim.keymap.set("n", "<space><space>", vim.lsp.buf.code_action, bufopts)
-    vim.keymap.set('n', '<space>e', require("lspsaga.diagnostic").show_line_diagnostics, bufopts)
-    vim.keymap.set("n", "[d", require("lspsaga.diagnostic").goto_prev, bufopts)
-    vim.keymap.set("n", "]d", require("lspsaga.diagnostic").goto_next, bufopts)
+    vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, bufopts)
+    vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, bufopts)
+    vim.keymap.set("n", "]d", vim.diagnostic.goto_next, bufopts)
     vim.keymap.set('n', '<leader>r', vim.lsp.buf.rename, bufopts)
     vim.keymap.set('n', 'gd', require("telescope.builtin").lsp_references, bufopts)
     vim.keymap.set('n', '<leader>e', require("telescope.builtin").diagnostics, bufopts)
 end
+
+vim.diagnostic.config {
+    float = {
+        border = "rounded"
+    }
+}
 
 -- Always make sure to include this at the BEGINNING
 require("nvim-lsp-installer").setup{
@@ -451,6 +451,17 @@ local feedkey = function(key, mode)
 end
 
 cmp.setup {
+  window = {
+    documentation = {
+      border = {'╭', '─', '╮', '│', '╯', '─', '╰', '│'},
+      winhighlight = 'FloatBorder:FloatBorder'
+    },
+    completion = {
+      border = {'┌', '─', '┐', '│', '┘', '─', '└', '│'},
+      winhighlight = 'Normal:CmpPmenu,CursorLine:PmenuSel,Search:None',
+    }
+  },
+
   snippet = {
     expand = function(args)
         vim.fn["vsnip#anonymous"](args.body)
@@ -509,4 +520,3 @@ EOF
 
 " Initialise vim-markdown
 let g:vim_markdown_folding_disabled=1
-

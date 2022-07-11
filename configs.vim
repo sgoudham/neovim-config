@@ -73,6 +73,11 @@ catppuccin.remap({
     DiagnosticWarn = { style = "NONE", bg = "NONE" },
     LspSagaDiagnosticBorder = { fg = cp.blue },
     LspSagaDiagnosticHeader = { fg = cp.lavender },
+    -- String when matched fuzzily
+    CmpItemAbbrMatch = { fg = cp.blue, style="bold" },
+    CmpItemAbbrMatchFuzzy = { fg = cp.blue, style="bold" },
+    -- Background of the completion menu & when item is selected
+    PmenuSel = { bg = "#3A3A4A" }
 })
 EOF
 

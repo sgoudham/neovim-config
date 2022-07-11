@@ -12,7 +12,6 @@ set noswapfile
 " Enable filetype plugins
 filetype plugin on
 filetype indent on
-set autoindent
 
 " Permanent Undo
 set undodir=~\AppData\Local\nvim\.vimdid

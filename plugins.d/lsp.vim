@@ -1,7 +1,6 @@
 " NeoVim LSP client
 Plug 'williamboman/nvim-lsp-installer'
 Plug 'neovim/nvim-lspconfig'
-Plug 'glepnir/lspsaga.nvim'
 Plug 'ray-x/lsp_signature.nvim'
 
 " Snippet engine
