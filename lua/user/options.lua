@@ -1,6 +1,6 @@
 local guifont = "OperatorMono"
 local nerd_font = "NF"
-local size = 13
+local size = 11
 
 vim.g.neovide_cursor_trail_length = 0 -- Remove neovide cursor trail
 vim.g.neovide_cursor_animation_length = 0 -- Remove neovide cursor animation
@@ -83,7 +83,7 @@ vim.opt.encoding = "utf8" -- Set UTF8 as standard encoding
 vim.opt.backup = false -- Turn backup off, most things should be version controlled
 vim.opt.swapfile = false
 
-vim.opt.undodir = [[\.vimdid]] -- Permanent undo
+vim.opt.undodir = [[.vimdid]] -- Permanent undo
 vim.opt.undofile = true
 
 vim.opt.autoread = true -- Set to autoread when file is changed outside of Neovim
@@ -106,6 +106,13 @@ vim.api.nvim_create_autocmd("BufEnter", {
             vim.cmd "quit"
         end
     end
+})
+-- Also, you can create an autocmd `User PackerCompileDone` to update it every time packer is compiled:
+vim.api.nvim_create_autocmd("User", {
+    pattern = "PackerCompileDone",
+    callback = function()
+        vim.cmd "CatppuccinCompile"
+    end,
 })
 
 function adjust_font_size(amount)

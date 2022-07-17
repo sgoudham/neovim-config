@@ -28,4 +28,4 @@ for _, server in pairs(servers) do
     lsp_config[server].setup(opts)
 end
 
-require("user.lsp.servers.rust-analyzer")
+require("user.lsp.servers.rust_analyzer")
