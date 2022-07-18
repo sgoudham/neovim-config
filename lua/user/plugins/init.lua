@@ -119,8 +119,7 @@ return packer.startup(function(use)
     use {
         "catppuccin/nvim",
         as = "catppuccin",
-        branch = "dev",
-        run = "CatppuccinCompile",
+        run = ":CatppuccinCompile",
         config = function()
             require "user.plugins.colourscheme"
         end

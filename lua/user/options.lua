@@ -83,7 +83,7 @@ vim.opt.encoding = "utf8" -- Set UTF8 as standard encoding
 vim.opt.backup = false -- Turn backup off, most things should be version controlled
 vim.opt.swapfile = false
 
-vim.opt.undodir = [[.vimdid]] -- Permanent undo
+vim.opt.undodir = [[C:\Users\sgoud\AppData\Local\nvim\.vimdid]] -- Permanent undo
 vim.opt.undofile = true
 
 vim.opt.autoread = true -- Set to autoread when file is changed outside of Neovim
@@ -107,11 +107,14 @@ vim.api.nvim_create_autocmd("BufEnter", {
         end
     end
 })
--- Also, you can create an autocmd `User PackerCompileDone` to update it every time packer is compiled:
+-- Create an autocmd `User PackerCompileDone` to update it every time packer is compiled:
 vim.api.nvim_create_autocmd("User", {
     pattern = "PackerCompileDone",
     callback = function()
         vim.cmd "CatppuccinCompile"
+        vim.defer_fn(function()
+            vim.cmd "colorscheme catppuccin"
+        end, 50) -- Debounced for live reloading
     end,
 })
 
