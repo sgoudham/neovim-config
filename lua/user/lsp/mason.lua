@@ -1,13 +1,17 @@
+require("mason").setup()
+
 local servers = {
     -- "rust_analyzer", Special case: use rust-tools.nvim
     "vimls",
     "jsonls",
     "marksman",
-    "sumneko_lua"
+    "sumneko_lua",
+    "pyright",
+    "yamlls"
 }
 
 -- Always make sure to include this at the BEGINNING
-require("nvim-lsp-installer").setup {
+require("mason-lspconfig").setup {
     ensure_installed = servers
 }
 

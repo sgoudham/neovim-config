@@ -23,6 +23,7 @@ end
 
 -- Have packer use a popup window
 packer.init {
+    auto_reload_compiled = true,
     display = {
         open_fn = function()
             return require("packer.util").float { border = "rounded" }
@@ -35,6 +36,7 @@ return packer.startup(function(use)
     use 'wbthomason/packer.nvim'
 
     -- No config needed
+    use { "antoinemadec/FixCursorHold.nvim" }
     use { "andweeb/presence.nvim" }
     use { "tpope/vim-commentary" }
     use { "airblade/vim-rooter" }
@@ -44,24 +46,47 @@ return packer.startup(function(use)
     use { "nvim-telescope/telescope-project.nvim" }
     use { "nvim-telescope/telescope-ui-select.nvim" }
     use { "nvim-telescope/telescope-fzf-native.nvim", run = "make" }
+    use { "nvim-telescope/telescope-file-browser.nvim" }
     use { "p00f/nvim-ts-rainbow" }
     use { "neovim/nvim-lspconfig" }
     use { "williamboman/nvim-lsp-installer" }
+    use { "williamboman/mason.nvim" }
+    use { "williamboman/mason-lspconfig.nvim" }
     use { "hrsh7th/nvim-cmp" }
     use { "hrsh7th/cmp-nvim-lsp" }
     use { "hrsh7th/cmp-vsnip" }
     use { "hrsh7th/cmp-path" }
     use { "hrsh7th/cmp-buffer" }
     use { "hrsh7th/cmp-cmdline" }
+    use { "ellisonleao/glow.nvim" }
+    use { "simrat39/rust-tools.nvim", branch = "modularize_and_inlay_rewrite" }
     use {
         "hrsh7th/vim-vsnip",
         requires = {
             { "hrsh7th/vim-vsnip-integ", after = "vim-vsnip" }
         }
     }
-    use { "simrat39/rust-tools.nvim", branch = "modularize_and_inlay_rewrite" }
 
-
+    use { "iamcco/markdown-preview.nvim",
+        run = "cd app && npm install",
+        setup = function()
+            vim.g.mkdp_filetypes = { "markdown" }
+        end,
+        ft = { "markdown" }
+    }
+    use {
+        "jose-elias-alvarez/null-ls.nvim",
+        config = function()
+            require "user.plugins.null-ls"
+        end,
+        requires = "nvim-lua/plenary.nvim"
+    }
+    use {
+        "mbbill/undotree",
+        config = function()
+            require "user.plugins.undotree"
+        end
+    }
     use {
         "Pocco81/AutoSave.nvim",
         config = function()
@@ -150,7 +175,8 @@ return packer.startup(function(use)
             "nvim-lua/popup.nvim",
             "nvim-telescope/telescope-project.nvim",
             "nvim-telescope/telescope-ui-select.nvim",
-            "nvim-telescope/telescope-fzf-native.nvim"
+            "nvim-telescope/telescope-fzf-native.nvim",
+            "nvim-telescope/telescope-file-browser.nvim"
         },
         config = function()
             require "user.plugins.telescope"

@@ -1,7 +1,7 @@
 local cp = require("catppuccin.palettes").get_palette()
 
 require("catppuccin").setup {
-    term_colors = true,
+    term_colors = false,
     transparent_background = false,
     styles = {
         comments = {},
@@ -21,7 +21,15 @@ require("catppuccin").setup {
         enabled = true
     },
     integrations = {
-        ts_rainbow = true
+        ts_rainbow = true,
+        native_lsp = {
+            virtual_text = {
+                errors = {},
+                hints = {},
+                warnings = {},
+                information = {}
+            }
+        }
     },
     custom_highlights = {
         ErrorMsg = { fg = cp.red, style = { "bold" } },
@@ -67,3 +75,9 @@ require("catppuccin").setup {
 
 vim.g.catppuccin_flavour = "mocha"
 vim.cmd [[colorscheme catppuccin]]
+
+-- require("gruvbox").setup {
+--     italic = false
+-- }
+-- vim.o.background = "dark"
+-- vim.cmd [[colorscheme gruvbox]]

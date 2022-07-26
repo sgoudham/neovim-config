@@ -1,5 +1,6 @@
 .idea
 plugged
 .vimdid
+.backupdir
 plugin
 .luarc.json

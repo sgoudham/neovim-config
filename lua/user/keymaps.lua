@@ -5,6 +5,12 @@ local remap_opts = { remap = true }
 
 vim.g.mapleader = ";"
 
+-- Neovide toggle fullscreen
+map("n", "<F11>", ":let g:neovide_fullscreen = !g:neovide_fullscreen<CR>", opts)
+
+-- Undotree
+map("n", "<leader>ut", ":UndotreeToggle<CR>", opts)
+
 -- LSP Snippets
 map({ "i", "s" }, "<C-j>",
     function() if vim.fn['vsnip#expandable']() == 1 then return "<Plug>(vsnip-expand)" else return "<C-j>" end end,
@@ -20,7 +26,7 @@ map({ "i", "s" }, "<S-Tab>",
     expr_opts)
 
 -- NvimTree
-map("n", "<C-n>", ":NvimTreeToggle<CR>", opts)
+map("n", "<space>n", ":NvimTreeToggle<CR>", opts)
 
 -- Telescope
 map("n", "<leader>fb", ":lua require('telescope.builtin').buffers()<CR>", opts)
@@ -29,7 +35,8 @@ map("n", "<leader>ff", ":lua require('telescope.builtin').find_files()<CR>", opt
 map("n", "<leader>fg", ":lua require('telescope.builtin').live_grep()<CR>", opts)
 map("n", "<leader>fc", ":lua require('telescope.builtin').live_grep({ search_dirs = { vim.fn.expand('%:p') } })<CR>",
     opts)
-map("n", "<leader>cd", ":lua require('telescope').extensions.project.project{}<CR>", opts)
+map("n", "<leader>fd", ":lua require('telescope').extensions.project.project{}<CR>", opts)
+map("n", "<leader>fn", ":Telescope file_browser<CR>", opts)
 
 -- Session Manager
 map("n", "<leader>ss", ":SessionManager save_current_session<CR>", remap_opts)
@@ -46,15 +53,13 @@ map({ "n", "t" }, "<leader>h", ":FloatermPrev<CR>", opts)
 map({ "n", "t" }, "<leader>l", ":FloatermNext<CR>", opts)
 
 -- Useful
-map("n", "<leader>w", ":w<CR>", opts) -- Quick exit
-map("n", "<leader>q", ":q<CR>", opts) -- Quick save
+map("n", "<leader>w", ":w<CR>", opts) -- Quick save
+map("n", "<leader>q", ":q<CR>", opts) -- Quick exit
 map("n", "0", "^", opts) -- 0 -> First non-blank character
 map("n", "<CR>", "o<ESC>", opts) -- Create new line without going into insert mode
 map("n", "<leader><space>", ":noh<CR>", opts) -- Disable highlights
-map("n", "<C-[>", "<C-o>", opts) -- Jump backwards ([)
-map("n", "<C-]>", "<C-i>", opts) -- Jump forwards (])
-map("n", "<Left>", ":lua adjust_font_size(-1)<CR>", opts) -- Decrease font_size
-map("n", "<Right>", ":lua adjust_font_size(1)<CR>", opts) -- Increase font_size
+map("n", "<space>[", ":lua adjust_font_size(-1)<CR>", opts) -- Decrease font_size
+map("n", "<space>]", ":lua adjust_font_size(1)<CR>", opts) -- Increase font_size
 
 -- Easy copy/paste from system clipboard
 map("n", "<leader>y", [["+yy]], opts)

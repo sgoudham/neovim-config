@@ -1,9 +1,10 @@
-local guifont = "OperatorMono"
+local guifont = "JetBrainsMono"
 local nerd_font = "NF"
 local size = 11
 
 vim.g.neovide_cursor_trail_length = 0 -- Remove neovide cursor trail
 vim.g.neovide_cursor_animation_length = 0 -- Remove neovide cursor animation
+-- vim.g.neovide_fullscreen = false
 
 vim.opt.guifont = guifont .. " " .. nerd_font .. ":h" .. size -- Set guifont for graphical neovim applications
 
@@ -80,13 +81,16 @@ vim.opt.signcolumn = "yes" -- Have a fixed column for the diagnostics to appear 
 
 vim.opt.encoding = "utf8" -- Set UTF8 as standard encoding
 
-vim.opt.backup = false -- Turn backup off, most things should be version controlled
+vim.opt.backup = true -- Turn backup on, in case neovim crashes ;)
+vim.opt.backupdir = [[C:\Users\sgoud\AppData\Local\nvim\.backupdir]]
 vim.opt.swapfile = false
 
 vim.opt.undodir = [[C:\Users\sgoud\AppData\Local\nvim\.vimdid]] -- Permanent undo
 vim.opt.undofile = true
 
-vim.opt.autoread = true -- Set to autoread when file is changed outside of Neovim
+vim.opt.autoread = true -- Set to autoread when file is changed outside of neovim
+
+vim.opt.pumheight = 30 -- Limit completion menu items to only display 30 max
 
 -- Trigger 'autoread' when changing buffers
 vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained" }, {

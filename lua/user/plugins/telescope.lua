@@ -37,6 +37,10 @@ require("telescope").setup {
         },
         project = {
             theme = 'dropdown'
+        },
+        file_browser = {
+            theme = "ivy",
+            hijack_netrw = true
         }
     }
 }
@@ -44,3 +48,4 @@ require("telescope").setup {
 require("telescope").load_extension("fzf")
 require("telescope").load_extension("ui-select")
 require("telescope").load_extension("project")
+require("telescope").load_extension("file_browser")
